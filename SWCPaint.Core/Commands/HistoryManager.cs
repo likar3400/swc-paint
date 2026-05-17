@@ -1,6 +1,6 @@
 ﻿namespace SWCPaint.Core.Commands;
 
-public class HistoryManager
+public class HistoryManager : IHistoryManager
 {
     private readonly Stack<IUndoableCommand> _undoStack = new();
     private readonly Stack<IUndoableCommand> _redoStack = new();

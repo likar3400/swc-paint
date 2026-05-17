@@ -1,4 +1,5 @@
-﻿namespace SWCPaint.Core.Commands;
+using System.Linq;
+namespace SWCPaint.Core.Commands;
 
 public class HistoryManager : IHistoryManager
 {
@@ -38,6 +39,16 @@ public class HistoryManager : IHistoryManager
         command.Execute();
         _undoStack.Push(command);
         HistoryChanged?.Invoke();
+    }
+    private void TrimHistory()
+    {
+        var items = _undoStack.ToArray();
+        _undoStack.Clear();
+
+        foreach (var item in items.Take(_maxHistorySize).Reverse())
+        {
+            _undoStack.Push(item);
+        }
     }
 }
 

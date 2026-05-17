@@ -9,13 +9,16 @@ public class HistoryManager : IHistoryManager
     public bool CanUndo => _undoStack.Count > 0;
     public bool CanRedo => _redoStack.Count > 0;
 
-    public void Execute(IUndoableCommand command)
-    {
-        command.Execute();
-        _undoStack.Push(command);
-        _redoStack.Clear();
-        HistoryChanged?.Invoke();
-    }
+   public void Execute(IUndoableCommand command)
+{
+    command.Execute();
+    _undoStack.Push(command);
+    _redoStack.Clear();
+    if (_undoStack.Count > _maxHistorySize)
+        TrimHistory();
+
+    HistoryChanged?.Invoke();
+}
 
     public void Undo()
     {
@@ -37,3 +40,4 @@ public class HistoryManager : IHistoryManager
         HistoryChanged?.Invoke();
     }
 }
+
